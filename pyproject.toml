@@ -28,14 +28,28 @@ dev = [
     "ruff (>=0.17.1,<0.18.0)"
 ]
 
+[project.scripts]
+cyp2d6-classifier = "cyp2d6_classifier.cli:main"
+
+
 
 [tool.taskipy.tasks]
+# Execução da CLI em desenvolvimento
+run = "python -m cyp2d6_classifier.cli"
+
+# Granularidade da suíte de testes
+test = "pytest tests/unit"
+"test:unit" = "pytest tests/unit"
+"test:e2e" = "pytest tests/e2e"
+"test:all" = "pytest tests"
+test_cov = "pytest tests/unit --cov=cyp2d6_classifier --cov-report=term-missing"
+
+# Qualidade estática e pipeline integrada
 lint = "ruff check . && ruff format --check ."
 format = "ruff format . && ruff check --fix ."
 typecheck = "mypy src"
-test = "pytest tests/unit"
-test_cov = "pytest tests/unit --cov=cyp2d6_classifier --cov-report=term-missing"
-check = "task lint && task typecheck && task test"
+check = "task lint && task typecheck && task test:all"
+
 
 [tool.ruff]
 line-length = 88
