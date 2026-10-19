@@ -6,8 +6,9 @@ authors = [
     {name = "Marcelo Gomes de Paula",email = "marcelo.paula@dasa.com.br"}
 ]
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.11,<4.0"
 dependencies = [
+    "click (>=8.5.0,<9.0.0)"
 ]
 
 [tool.poetry]
@@ -20,5 +21,30 @@ build-backend = "poetry.core.masonry.api"
 [dependency-groups]
 dev = [
     "pytest (>=9.1.1,<10.0.0)",
-    "pytest-cov (>=7.1.0,<8.0.0)"
+    "pytest-cov (>=7.1.0,<8.0.0)",
+    "taskipy (>=1.14.1,<2.0.0)",
+    "pytest-mock (>=3.17.0,<4.0.0)",
+    "mypy (>=2.4.0,<3.0.0)",
+    "ruff (>=0.17.1,<0.18.0)"
 ]
+
+
+[tool.taskipy.tasks]
+lint = "ruff check . && ruff format --check ."
+format = "ruff format . && ruff check --fix ."
+typecheck = "mypy src"
+test = "pytest tests/unit"
+test_cov = "pytest tests/unit --cov=cyp2d6_classifier --cov-report=term-missing"
+check = "task lint && task typecheck && task test"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
